@@ -76,6 +76,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         return mCourses.size();
     }
 
+    public void addCourse(CoursePOJO newCourse) {
+        mCourses.add(newCourse);
+        notifyDataSetChanged();
+    }
+
     public String getCourseDataAsString() {
         return new Gson().toJson(mCourses);
     }

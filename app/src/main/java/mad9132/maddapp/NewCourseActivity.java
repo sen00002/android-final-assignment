@@ -1,10 +1,14 @@
 package mad9132.maddapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 
 import mad9132.maddapp.model.CoursePOJO;
+
+import static mad9132.maddapp.MainActivity.NEW_COURSE_DATA;
 
 
 /**
@@ -14,29 +18,36 @@ import mad9132.maddapp.model.CoursePOJO;
  */
 public class NewCourseActivity extends Activity {
 
-    private TextView  tvCode;
-    private TextView  tvDescription;
-    private TextView  tvLevel;
-    private TextView  tvName;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_new_course);
 
-        CoursePOJO selectedCourse = getIntent().getExtras().getParcelable(CourseAdapter.COURSE_KEY);
-        if (selectedCourse == null) {
-            throw new AssertionError("Null data item received!");
-        }
+        Button saveButton = findViewById(R.id.bSave);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CoursePOJO newCourse = new CoursePOJO();
+                newCourse.setCode("MAD9021");
+                newCourse.setName("Intro to Object-Oriented Programming");
+                newCourse.setDescription("Let's learn OO!");
+                newCourse.setLevel(2);
 
-        tvName = (TextView) findViewById(R.id.tvName);
-        tvDescription = (TextView) findViewById(R.id.tvDescription);
-        tvCode = (TextView) findViewById(R.id.tvNewCourse);
-        tvLevel = (TextView) findViewById(R.id.tvLevel);
+                Intent intent = new Intent();
+                intent.putExtra(NEW_COURSE_DATA, newCourse);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
 
-        tvCode.setText(selectedCourse.getCode());
-        tvName.setText(selectedCourse.getName());
-        tvDescription.setText(String.format(getResources().getString(R.string.descriptionFormat), selectedCourse.getDescription()));
-        tvLevel.setText(String.format(getResources().getString(R.string.levelFormat), selectedCourse.getLevel()));
+        Button cancelButton = findViewById(R.id.bCancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
+                finish();
+            }
+        });
     }
 }

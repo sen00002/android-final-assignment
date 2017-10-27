@@ -1,12 +1,14 @@
 package mad9132.maddapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import mad9132.maddapp.model.CoursePOJO;
 import mad9132.maddapp.utils.JSONFileManager;
 
 /**
@@ -17,7 +19,10 @@ import mad9132.maddapp.utils.JSONFileManager;
  * b) RecyclerView + Adapter + ViewHolder
  */
 public class MainActivity extends Activity {
+
     private static final String JSON_FILE = "courses.json";
+    public static final String  NEW_COURSE_DATA = "NEW_COURSE_DATA";
+    public static final int     NEW_COURSE_REQUEST = 1;
 
     private CourseAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -59,6 +64,11 @@ public class MainActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
 
+            case R.id.action_add_course:
+                Intent intent = new Intent(this, NewCourseActivity.class);
+                startActivityForResult(intent, NEW_COURSE_REQUEST);
+                return true;
+
             case R.id.action_reset:
                 String originalCourseDataJSON = JSONFileManager.readJSON(this, R.raw.courses);
                 mAdapter.setCourseDataWithString(originalCourseDataJSON);
@@ -72,9 +82,24 @@ public class MainActivity extends Activity {
         /* Write the course data as a JSON string to local storage */
         boolean isSuccess = JSONFileManager.writeJSON(this, JSON_FILE, mAdapter.getCourseDataAsString());
 
-        if ( ! isSuccess) {
+        if ( ! isSuccess ) {
             Toast.makeText(this, "Error: writing to local file: " + JSON_FILE, Toast.LENGTH_LONG).show();
         }
         super.onStop();
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        if (requestCode == NEW_COURSE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                CoursePOJO newCourse = data.getExtras().getParcelable(NEW_COURSE_DATA);
+                Toast.makeText(this, "Added Course: " + newCourse.getName(), Toast.LENGTH_SHORT).show();
+                mAdapter.addCourse(newCourse);
+            }
+
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Cancelled: Add New Course", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
