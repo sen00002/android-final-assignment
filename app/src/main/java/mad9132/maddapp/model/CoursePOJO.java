@@ -10,10 +10,19 @@ import android.os.Parcelable;
  */
 public class CoursePOJO implements Parcelable {
 
+    private int    courseId;
     private String code;
-    private String name;
     private String description;
-    private int level;
+    private int    level;
+    private String name;
+
+    public int getCourseId() {
+            return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
 
     public String getCode() {
         return code;
@@ -21,14 +30,6 @@ public class CoursePOJO implements Parcelable {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
@@ -47,6 +48,14 @@ public class CoursePOJO implements Parcelable {
         this.level = level;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -54,20 +63,22 @@ public class CoursePOJO implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.courseId);
         dest.writeString(this.code);
-        dest.writeString(this.name);
         dest.writeString(this.description);
         dest.writeInt(this.level);
+        dest.writeString(this.name);
     }
 
     public CoursePOJO() {
     }
 
     protected CoursePOJO(Parcel in) {
+        this.courseId = in.readInt();
         this.code = in.readString();
-        this.name = in.readString();
         this.description = in.readString();
         this.level = in.readInt();
+        this.name = in.readString();
     }
 
     public static final Creator<CoursePOJO> CREATOR = new Creator<CoursePOJO>() {
@@ -81,4 +92,20 @@ public class CoursePOJO implements Parcelable {
             return new CoursePOJO[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CoursePOJO that = (CoursePOJO) o;
+
+        return courseId == that.courseId;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return courseId;
+    }
 }

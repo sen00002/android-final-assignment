@@ -22,7 +22,9 @@ public class MainActivity extends Activity {
 
     private static final String JSON_FILE = "courses.json";
     public static final String  NEW_COURSE_DATA = "NEW_COURSE_DATA";
-    public static final int     NEW_COURSE_REQUEST = 1;
+    public static final String  EDIT_COURSE_DATA = "EDIT_COURSE_DATA";
+    public static final int     REQUEST_NEW_COURSE = 1;
+    public static final int     REQUEST_EDIT_COURSE = 2;
 
     private CourseAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -66,7 +68,7 @@ public class MainActivity extends Activity {
 
             case R.id.action_add_course:
                 Intent intent = new Intent(this, NewCourseActivity.class);
-                startActivityForResult(intent, NEW_COURSE_REQUEST);
+                startActivityForResult(intent, REQUEST_NEW_COURSE);
                 return true;
 
             case R.id.action_reset:
@@ -90,7 +92,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
-        if (requestCode == NEW_COURSE_REQUEST) {
+        if (requestCode == REQUEST_NEW_COURSE) {
             if (resultCode == RESULT_OK) {
                 CoursePOJO newCourse = data.getExtras().getParcelable(NEW_COURSE_DATA);
                 Toast.makeText(this, "Added Course: " + newCourse.getName(), Toast.LENGTH_SHORT).show();
@@ -99,6 +101,18 @@ public class MainActivity extends Activity {
 
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Cancelled: Add New Course", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (requestCode == REQUEST_EDIT_COURSE) {
+            if (resultCode == RESULT_OK) {
+                CoursePOJO updatedCourse = data.getExtras().getParcelable(EDIT_COURSE_DATA);
+                Toast.makeText(this, "Updated Course: " + updatedCourse.getName(), Toast.LENGTH_SHORT).show();
+                mAdapter.updateCourse(updatedCourse);
+            }
+
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Cancelled: Edit Course", Toast.LENGTH_SHORT).show();
             }
         }
     }

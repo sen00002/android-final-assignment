@@ -31,7 +31,7 @@ public class DetailActivity extends Activity {
 
         tvName = (TextView) findViewById(R.id.tvName);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
-        tvCode = (TextView) findViewById(R.id.tvNewCourse);
+        tvCode = (TextView) findViewById(R.id.tvEditCourse);
         tvLevel = (TextView) findViewById(R.id.tvLevel);
 
         tvCode.setText(selectedCourse.getCode());

@@ -9,15 +9,41 @@
 
     <TextView
         android:id="@+id/courseCodeText"
-        android:layout_width="wrap_content"
+        android:layout_width="209dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="MAD9132"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
+
+    <ImageButton
+        android:id="@+id/editCourseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@null"
+        android:src="@android:drawable/ic_menu_edit"
+        android:contentDescription="Edit Course Button"
+        android:visibility="invisible"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        app:layout_constraintTop_toTopOf="@+id/courseCodeText"
+        app:layout_constraintRight_toLeftOf="@+id/deleteCourseButton" />
+
+    <ImageButton
+        android:id="@+id/deleteCourseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:visibility="invisible"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_delete"
+        android:src="@android:drawable/ic_menu_delete"
+        android:contentDescription="Delete Course Button"
+        app:layout_constraintTop_toTopOf="@+id/courseCodeText"
+        android:background="@null"/>
 
     <TextView
         android:id="@+id/courseNameText"
@@ -25,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/courseCodeText"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:text="Android App Development"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
