@@ -12,11 +12,22 @@ import mad9132.maddapp.model.CoursePOJO;
 import mad9132.maddapp.utils.JSONFileManager;
 
 /**
- * MAD&D App: list the courses of the MAD&D program.
+ * MAD&D App: basic CRUD app to manage the courses of the MAD&D program.
  *
  * Features:
- * a) read / write JSON data using local storage
+ * a) Master / Detail - list of courses, select a course for detail
+ * a) CRUD app - Create a MAD Course, Read / Retrieve list of courses, Update a course, Delete a course
  * b) RecyclerView + Adapter + ViewHolder
+ * c) persistent data: read / write JSON data using local storage
+ *
+ * Usage:
+ * a) Create a course - menu > Add New Course
+ * b) Update a course - select & long-press to see edit option
+ * c) Delete a course - select & long-press to see delete option
+ * d) Course detail - select & click
+ * e) Reset course data to original list - menu > Reset Courses
+ *
+ * @author Gerald.Hurdle@AlgonquinCollege.com
  */
 public class MainActivity extends Activity {
 
