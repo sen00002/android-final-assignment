@@ -1,6 +1,8 @@
 package mad9132.maddapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -83,12 +85,51 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         holder.bDeleteCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "Deleted Course: " + aCourse.getCode());
-                mCourses.remove(position);
-                CourseAdapter.this.notifyDataSetChanged();
-                holder.bDeleteCourse.setVisibility(View.INVISIBLE);
-                holder.bEditCourse.setVisibility(View.INVISIBLE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                // TODO - externalize strings to strings.xml
+                builder.setTitle("Confirm")
+                    .setMessage("Delete " + aCourse.getCode() + " - " + aCourse.getName() + "?")
+
+                        // Displays: OK
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Delete this course
+                            Toast.makeText(mContext, "Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
+                            Log.i(TAG, "Deleted Course: " + aCourse.getCode());
+                            holder.bDeleteCourse.setVisibility(View.INVISIBLE);
+                            holder.bEditCourse.setVisibility(View.INVISIBLE);
+
+                            // TODO - for Doors Open app, replace these two lines:
+                            mCourses.remove(position);
+                            CourseAdapter.this.notifyDataSetChanged();
+                            // With call to intent service to DELETE /buildings/:id
+                            //
+                            // RequestPackage requestPackage = new RequestPackage();
+                            // requestPackage.setMethod( HttpMethod.DELETE );
+                            // requestPackage.setEndPoint( JSON_URL + aBuilding.getBuildingId() );
+
+                            // Intent intent = new Intent(this, MyService.class);
+                            // intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
+                            // mContext.startService(intent);
+
+                            dialog.dismiss();
+                    }
+                    })
+
+                        // Displays: Cancel
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do nothing
+                            dialog.dismiss();
+
+                            Toast.makeText(mContext, "CANCELLED: Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
+                            Log.i(TAG, "CANCELLED: Deleted Course: " + aCourse.getCode());
+                        }
+                    });
+
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
 

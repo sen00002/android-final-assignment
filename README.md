@@ -11,6 +11,7 @@
 1. Create a course - menu > Add New Course
 2. Update a course - select & long-press to see edit option
 3. Delete a course - select & long-press to see delete option
+    * Display dialog, confirming course deletion
 4. Course detail - select & click
 5. Reset course data to original list - menu > Reset Courses
 
