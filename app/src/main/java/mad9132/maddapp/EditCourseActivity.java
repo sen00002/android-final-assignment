@@ -3,7 +3,6 @@ package mad9132.maddapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import mad9132.maddapp.model.CoursePOJO;
 
 import static mad9132.maddapp.MainActivity.EDIT_COURSE_DATA;
-import static mad9132.maddapp.MainActivity.NEW_COURSE_DATA;
 
 
 /**
@@ -60,19 +58,19 @@ public class EditCourseActivity extends Activity {
 
                 // Validation Rule: all fields are required
                 if (name.isEmpty()) {
-                    nameEditText.setError( "Please Enter the Course Name");
+                    nameEditText.setError("Please Enter the Course Name");
                     nameEditText.requestFocus();
                     return;
                 }
 
                 if (levelString.isEmpty()) {
-                    levelEditText.setError( "Please Enter the Course Level: 1 to 4");
+                    levelEditText.setError("Please Enter the Course Level: 1 to 4");
                     levelEditText.requestFocus();
                     return;
                 }
 
                 if (description.isEmpty()) {
-                    descriptionEditText.setError( "Please Enter the Course Description.");
+                    descriptionEditText.setError("Please Enter the Course Description.");
                     descriptionEditText.requestFocus();
                     return;
                 }
@@ -84,14 +82,14 @@ public class EditCourseActivity extends Activity {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-                if ( (level < 1) || (level > 4) ) {
-                    levelEditText.setError( "Please Enter the Course Level: 1 to 4");
+                if ((level < 1) || (level > 4)) {
+                    levelEditText.setError("Please Enter the Course Level: 1 to 4");
                     levelEditText.requestFocus();
                 }
 
-                selectedCourse.setName( name );
-                selectedCourse.setDescription( description );
-                selectedCourse.setLevel( level );
+                selectedCourse.setName(name);
+                selectedCourse.setDescription(description);
+                selectedCourse.setLevel(level);
 
                 Intent intent = new Intent();
                 intent.putExtra(EDIT_COURSE_DATA, selectedCourse);

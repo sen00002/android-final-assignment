@@ -13,13 +13,13 @@ import mad9132.maddapp.utils.JSONFileManager;
 
 /**
  * MAD&D App: basic CRUD app to manage the courses of the MAD&D program.
- *
+ * <p>
  * Features:
  * a) Master / Detail - list of courses, select a course for detail
  * a) CRUD app - Create a MAD Course, Read / Retrieve list of courses, Update a course, Delete a course
  * b) RecyclerView + Adapter + ViewHolder
  * c) persistent data: read / write JSON data using local storage
- *
+ * <p>
  * Usage:
  * a) Create a course - menu > Add New Course
  * b) Update a course - select & long-press to see edit option
@@ -31,12 +31,11 @@ import mad9132.maddapp.utils.JSONFileManager;
  */
 public class MainActivity extends Activity {
 
+    public static final String NEW_COURSE_DATA = "NEW_COURSE_DATA";
+    public static final String EDIT_COURSE_DATA = "EDIT_COURSE_DATA";
+    public static final int REQUEST_NEW_COURSE = 1;
+    public static final int REQUEST_EDIT_COURSE = 2;
     private static final String JSON_FILE = "courses.json";
-    public static final String  NEW_COURSE_DATA = "NEW_COURSE_DATA";
-    public static final String  EDIT_COURSE_DATA = "EDIT_COURSE_DATA";
-    public static final int     REQUEST_NEW_COURSE = 1;
-    public static final int     REQUEST_EDIT_COURSE = 2;
-
     private CourseAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -54,9 +53,9 @@ public class MainActivity extends Activity {
          * system for modified data.
          */
         String courseDataJSON;
-        if ( JSONFileManager.exitsAsLocalFile(this, JSON_FILE) ) {
+        if (JSONFileManager.exitsAsLocalFile(this, JSON_FILE)) {
             courseDataJSON = JSONFileManager.readJSON(this, JSON_FILE);
-        } else{
+        } else {
             courseDataJSON = JSONFileManager.readJSON(this, R.raw.courses);
         }
 
@@ -95,14 +94,14 @@ public class MainActivity extends Activity {
         /* Write the course data as a JSON string to local storage */
         boolean isSuccess = JSONFileManager.writeJSON(this, JSON_FILE, mAdapter.getCourseDataAsString());
 
-        if ( ! isSuccess ) {
+        if (!isSuccess) {
             Toast.makeText(this, "Error: writing to local file: " + JSON_FILE, Toast.LENGTH_LONG).show();
         }
         super.onStop();
     }
 
     @Override
-    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_NEW_COURSE) {
             if (resultCode == RESULT_OK) {
                 CoursePOJO newCourse = data.getExtras().getParcelable(NEW_COURSE_DATA);

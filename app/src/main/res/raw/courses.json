@@ -1,25 +1,30 @@
-[{
-  "courseId": 0,
-  "code": "MAD9014",
-  "name": "Cross-Platform Application Development I",
-  "description": "Let's learn JavaScript!",
-  "level": 1
-}, {
-  "courseId": 1,
-  "code": "MAD9020",
-  "name": "User Interface Design",
-  "description": "Let's design with the User in-mind!",
-  "level": 2
-}, {
-  "courseId": 2,
-  "code": "MAD9132",
-  "name": "Android Application Development",
-  "description": "Let's write native Android apps with Java!",
-  "level": 3
-}, {
-  "courseId": 3,
-  "code": "MA9145",
-  "name": "Applied Project",
-  "description": "It's Go time!",
-  "level": 4
-}]
+[
+  {
+    "courseId": 0,
+    "code": "MAD9014",
+    "name": "Cross-Platform Application Development I",
+    "description": "Let's learn JavaScript!",
+    "level": 1
+  },
+  {
+    "courseId": 1,
+    "code": "MAD9020",
+    "name": "User Interface Design",
+    "description": "Let's design with the User in-mind!",
+    "level": 2
+  },
+  {
+    "courseId": 2,
+    "code": "MAD9132",
+    "name": "Android Application Development",
+    "description": "Let's write native Android apps with Java!",
+    "level": 3
+  },
+  {
+    "courseId": 3,
+    "code": "MA9145",
+    "name": "Applied Project",
+    "description": "It's Go time!",
+    "level": 4
+  }
+]

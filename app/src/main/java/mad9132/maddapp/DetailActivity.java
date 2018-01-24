@@ -14,10 +14,10 @@ import mad9132.maddapp.model.CoursePOJO;
  */
 public class DetailActivity extends Activity {
 
-    private TextView  tvCode;
-    private TextView  tvDescription;
-    private TextView  tvLevel;
-    private TextView  tvName;
+    private TextView tvCode;
+    private TextView tvDescription;
+    private TextView tvLevel;
+    private TextView tvName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

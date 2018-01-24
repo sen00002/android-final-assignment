@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 /**
  * JSONFileManager
- *
+ * <p>
  * References
  * 1. https://developer.android.com/guide/topics/data/data-storage.html#filesInternal
  * 2. https://developer.android.com/training/basics/data-storage/files.html
@@ -24,11 +24,10 @@ public class JSONFileManager {
      * @param context
      * @param filename
      * @return boolean - true if filename exists; otherwise, false.
-     *
      */
     public static boolean exitsAsLocalFile(Context context, String filename) {
         File localFile = context.getFileStreamPath(filename);
-        if ( localFile == null || !localFile.exists() ) {
+        if (localFile == null || !localFile.exists()) {
             return false;
         }
         return true;
@@ -36,7 +35,7 @@ public class JSONFileManager {
 
     /**
      * Return the JSON String stored at resourceId.
-     *
+     * <p>
      * Return null on error.
      *
      * @param context
@@ -61,7 +60,7 @@ public class JSONFileManager {
 
     /**
      * Return the JSON String stored at (local file) filename.
-     *
+     * <p>
      * Return null on error.
      *
      * @param context

@@ -46,32 +46,32 @@ public class NewCourseActivity extends Activity {
 
                 // Validation Rule: all fields are required
                 if (newCode.isEmpty()) {
-                    newCodeEditText.setError( "Please Enter the Course Code: MADnnnn");
+                    newCodeEditText.setError("Please Enter the Course Code: MADnnnn");
                     newCodeEditText.requestFocus();
                     return;
                 }
 
                 if (newName.isEmpty()) {
-                    newNameEditText.setError( "Please Enter the Course Name");
+                    newNameEditText.setError("Please Enter the Course Name");
                     newNameEditText.requestFocus();
                     return;
                 }
 
                 if (newLevelString.isEmpty()) {
-                    newLevelEditText.setError( "Please Enter the Course Level: 1 to 4");
+                    newLevelEditText.setError("Please Enter the Course Level: 1 to 4");
                     newLevelEditText.requestFocus();
                     return;
                 }
 
                 if (newDescription.isEmpty()) {
-                    newDescriptionEditText.setError( "Please Enter the Course Description.");
+                    newDescriptionEditText.setError("Please Enter the Course Description.");
                     newDescriptionEditText.requestFocus();
                     return;
                 }
 
                 // Validation Rule: course code's pattern is: MADnnn
                 if (newCode.matches("[M][A][D][0-9][0-9][0-9][0-9]") == false) {
-                    newCodeEditText.setError( "Please Enter the Course Code: MADnnnn");
+                    newCodeEditText.setError("Please Enter the Course Code: MADnnnn");
                     newCodeEditText.requestFocus();
                     return;
                 }
@@ -83,16 +83,16 @@ public class NewCourseActivity extends Activity {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-                if ( (newLevel < 1) || (newLevel > 4) ) {
-                    newLevelEditText.setError( "Please Enter the Course Level: 1 to 4");
+                if ((newLevel < 1) || (newLevel > 4)) {
+                    newLevelEditText.setError("Please Enter the Course Level: 1 to 4");
                     newLevelEditText.requestFocus();
                 }
 
                 CoursePOJO newCourse = new CoursePOJO();
-                newCourse.setCode( newCode );
-                newCourse.setName( newName );
-                newCourse.setDescription( newDescription );
-                newCourse.setLevel( newLevel );
+                newCourse.setCode(newCode);
+                newCourse.setName(newName);
+                newCourse.setDescription(newDescription);
+                newCourse.setLevel(newLevel);
 
                 Intent intent = new Intent();
                 intent.putExtra(NEW_COURSE_DATA, newCourse);

@@ -10,14 +10,36 @@ import android.os.Parcelable;
  */
 public class CoursePOJO implements Parcelable {
 
-    private int    courseId;
+    public static final Creator<CoursePOJO> CREATOR = new Creator<CoursePOJO>() {
+        @Override
+        public CoursePOJO createFromParcel(Parcel source) {
+            return new CoursePOJO(source);
+        }
+
+        @Override
+        public CoursePOJO[] newArray(int size) {
+            return new CoursePOJO[size];
+        }
+    };
+    private int courseId;
     private String code;
     private String description;
-    private int    level;
+    private int level;
     private String name;
 
+    public CoursePOJO() {
+    }
+
+    protected CoursePOJO(Parcel in) {
+        this.courseId = in.readInt();
+        this.code = in.readString();
+        this.description = in.readString();
+        this.level = in.readInt();
+        this.name = in.readString();
+    }
+
     public int getCourseId() {
-            return courseId;
+        return courseId;
     }
 
     public void setCourseId(int courseId) {
@@ -69,29 +91,6 @@ public class CoursePOJO implements Parcelable {
         dest.writeInt(this.level);
         dest.writeString(this.name);
     }
-
-    public CoursePOJO() {
-    }
-
-    protected CoursePOJO(Parcel in) {
-        this.courseId = in.readInt();
-        this.code = in.readString();
-        this.description = in.readString();
-        this.level = in.readInt();
-        this.name = in.readString();
-    }
-
-    public static final Creator<CoursePOJO> CREATOR = new Creator<CoursePOJO>() {
-        @Override
-        public CoursePOJO createFromParcel(Parcel source) {
-            return new CoursePOJO(source);
-        }
-
-        @Override
-        public CoursePOJO[] newArray(int size) {
-            return new CoursePOJO[size];
-        }
-    };
 
     @Override
     public boolean equals(Object o) {

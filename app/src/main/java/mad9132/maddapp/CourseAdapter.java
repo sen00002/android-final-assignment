@@ -26,14 +26,13 @@ import static mad9132.maddapp.MainActivity.REQUEST_EDIT_COURSE;
  * CourseAdapter.
  *
  * @author Gerald.Hurdle@AlgonquinCollege.com
- *
  */
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
 
-    public static final String  COURSE_KEY = "course_key";
-    private static final String TAG        = "CourseAdapter";
+    public static final String COURSE_KEY = "course_key";
+    private static final String TAG = "CourseAdapter";
 
-    private Activity              mContext;
+    private Activity mContext;
     private ArrayList<CoursePOJO> mCourses;
 
     public CourseAdapter(Activity context, String buildingsJSON) {
@@ -70,7 +69,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if ( (holder.bDeleteCourse.getVisibility() == View.VISIBLE)
+                if ((holder.bDeleteCourse.getVisibility() == View.VISIBLE)
                         && (holder.bEditCourse.getVisibility() == View.VISIBLE)) {
                     holder.bDeleteCourse.setVisibility(View.INVISIBLE);
                     holder.bEditCourse.setVisibility(View.INVISIBLE);
@@ -88,45 +87,45 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 // TODO - externalize strings to strings.xml
                 builder.setTitle("Confirm")
-                    .setMessage("Delete " + aCourse.getCode() + " - " + aCourse.getName() + "?")
+                        .setMessage("Delete " + aCourse.getCode() + " - " + aCourse.getName() + "?")
 
                         // Displays: OK
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Delete this course
-                            Toast.makeText(mContext, "Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
-                            Log.i(TAG, "Deleted Course: " + aCourse.getCode());
-                            holder.bDeleteCourse.setVisibility(View.INVISIBLE);
-                            holder.bEditCourse.setVisibility(View.INVISIBLE);
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Delete this course
+                                Toast.makeText(mContext, "Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "Deleted Course: " + aCourse.getCode());
+                                holder.bDeleteCourse.setVisibility(View.INVISIBLE);
+                                holder.bEditCourse.setVisibility(View.INVISIBLE);
 
-                            // TODO - for Doors Open app, replace these two lines:
-                            mCourses.remove(position);
-                            CourseAdapter.this.notifyDataSetChanged();
-                            // With call to intent service to DELETE /buildings/:id
-                            //
-                            // RequestPackage requestPackage = new RequestPackage();
-                            // requestPackage.setMethod( HttpMethod.DELETE );
-                            // requestPackage.setEndPoint( JSON_URL + aBuilding.getBuildingId() );
+                                // TODO - for Doors Open app, replace these two lines:
+                                mCourses.remove(position);
+                                CourseAdapter.this.notifyDataSetChanged();
+                                // With call to intent service to DELETE /buildings/:id
+                                //
+                                // RequestPackage requestPackage = new RequestPackage();
+                                // requestPackage.setMethod( HttpMethod.DELETE );
+                                // requestPackage.setEndPoint( JSON_URL + aBuilding.getBuildingId() );
 
-                            // Intent intent = new Intent(this, MyService.class);
-                            // intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
-                            // mContext.startService(intent);
+                                // Intent intent = new Intent(this, MyService.class);
+                                // intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
+                                // mContext.startService(intent);
 
-                            dialog.dismiss();
-                    }
-                    })
+                                dialog.dismiss();
+                            }
+                        })
 
                         // Displays: Cancel
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Do nothing
-                            dialog.dismiss();
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing
+                                dialog.dismiss();
 
-                            Toast.makeText(mContext, "CANCELLED: Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
-                            Log.i(TAG, "CANCELLED: Deleted Course: " + aCourse.getCode());
-                        }
-                    });
+                                Toast.makeText(mContext, "CANCELLED: Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "CANCELLED: Deleted Course: " + aCourse.getCode());
+                            }
+                        });
 
                 AlertDialog alert = builder.create();
                 alert.show();
@@ -180,9 +179,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public View        mView;
-        public TextView    tvCode;
-        public TextView    tvName;
+        public View mView;
+        public TextView tvCode;
+        public TextView tvName;
         public ImageButton bEditCourse;
         public ImageButton bDeleteCourse;
 
