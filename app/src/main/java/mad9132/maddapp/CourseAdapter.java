@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import mad9132.maddapp.model.CoursePOJO;
 
@@ -33,13 +33,39 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     private static final String TAG = "CourseAdapter";
 
     private Activity mContext;
-    private ArrayList<CoursePOJO> mCourses;
+    private List<CoursePOJO> mCourses;
 
-    public CourseAdapter(Activity context, String buildingsJSON) {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public View mView;
+        public TextView tvCode;
+        public TextView tvName;
+        public ImageButton bEditCourse;
+        public ImageButton bDeleteCourse;
+
+        public ViewHolder(View courseView) {
+            super(courseView);
+
+            mView = courseView;
+
+            tvCode = (TextView) courseView.findViewById(R.id.courseCodeText);
+            tvName = (TextView) courseView.findViewById(R.id.courseNameText);
+            bEditCourse = (ImageButton) courseView.findViewById(R.id.editCourseButton);
+            bDeleteCourse = (ImageButton) courseView.findViewById(R.id.deleteCourseButton);
+        }
+    }
+
+
+//    public CourseAdapter(Activity context, String buildingsJSON) {
+//        this.mContext = context;
+//
+//        Gson gson = new Gson();
+//        mCourses = new ArrayList<>(Arrays.asList(gson.fromJson(buildingsJSON, CoursePOJO[].class)));
+//    }
+
+    public CourseAdapter(Activity context, List<CoursePOJO> buildings){
         this.mContext = context;
-
-        Gson gson = new Gson();
-        mCourses = new ArrayList<>(Arrays.asList(gson.fromJson(buildingsJSON, CoursePOJO[].class)));
+        this.mCourses = buildings;
     }
 
     @Override
@@ -166,7 +192,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     }
 
     public String getCourseDataAsString() {
-        return new Gson().toJson(mCourses);
+        if(mCourses != null)
+            return new Gson().toJson(mCourses);
+        else
+            return " Null data ";
     }
 
     public void setCourseDataWithString(String courseDataJSON) {
@@ -177,23 +206,5 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         Log.i(TAG, "Reverting to.... Original list of courses");
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public View mView;
-        public TextView tvCode;
-        public TextView tvName;
-        public ImageButton bEditCourse;
-        public ImageButton bDeleteCourse;
-
-        public ViewHolder(View courseView) {
-            super(courseView);
-
-            mView = courseView;
-
-            tvCode = (TextView) courseView.findViewById(R.id.courseCodeText);
-            tvName = (TextView) courseView.findViewById(R.id.courseNameText);
-            bEditCourse = (ImageButton) courseView.findViewById(R.id.editCourseButton);
-            bDeleteCourse = (ImageButton) courseView.findViewById(R.id.deleteCourseButton);
-        }
-    }
 }

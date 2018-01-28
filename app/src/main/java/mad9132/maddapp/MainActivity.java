@@ -1,15 +1,27 @@
 package mad9132.maddapp;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.List;
+
+import mad9132.maddapp.MyServices.MyService;
 import mad9132.maddapp.model.CoursePOJO;
 import mad9132.maddapp.utils.JSONFileManager;
+import mad9132.maddapp.utils.NetworkHelper;
+import mad9132.maddapp.utils.RequestPackage;
 
 /**
  * MAD&D App: basic CRUD app to manage the courses of the MAD&D program.
@@ -31,13 +43,42 @@ import mad9132.maddapp.utils.JSONFileManager;
  */
 public class MainActivity extends Activity {
 
+    public static final String TAG_DEBUG = "Debug";
     public static final String NEW_COURSE_DATA = "NEW_COURSE_DATA";
     public static final String EDIT_COURSE_DATA = "EDIT_COURSE_DATA";
     public static final int REQUEST_NEW_COURSE = 1;
     public static final int REQUEST_EDIT_COURSE = 2;
-    private static final String JSON_FILE = "courses.json";
+//    private static final String JSON_FILE = "courses.json";
+    private static final String JSON_FILE = "http://10.0.2.2:3000/courses/";
+    private static final String JSON_URI_LOCAL = "courses.json";
+    private static final String JSON_URI_SERVER = "http://10.0.2.2:3000/courses/";
     private CourseAdapter mAdapter;
     private RecyclerView mRecyclerView;
+
+    private List<CoursePOJO> mBuildingsList;
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG_DEBUG, "onReceive: get data");
+            if (intent.hasExtra(MyService.MY_SERVICE_PAYLOAD)) {
+                CoursePOJO[] buildingsArray = (CoursePOJO[]) intent
+                        .getParcelableArrayExtra(MyService.MY_SERVICE_PAYLOAD);
+//                Toast.makeText(MainActivity.this,
+//                        "Received " + buildingsArray.length + " buildings from service",
+//                        Toast.LENGTH_SHORT).show();
+                mBuildingsList = Arrays.asList(buildingsArray);
+                displayBuildings();
+            } else if (intent.hasExtra(MyService.MY_SERVICE_RESPONSE)) {
+                CoursePOJO myBuilding = intent.getParcelableExtra(MyService.MY_SERVICE_RESPONSE);
+            } else if (intent.hasExtra(MyService.MY_SERVICE_EXCEPTION)) {
+                String message = intent.getStringExtra(MyService.MY_SERVICE_EXCEPTION);
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +93,26 @@ public class MainActivity extends Activity {
          * FYI... res/* is readable only. So... use res/raw to store orignal data, and local file
          * system for modified data.
          */
-        String courseDataJSON;
-        if (JSONFileManager.exitsAsLocalFile(this, JSON_FILE)) {
-            courseDataJSON = JSONFileManager.readJSON(this, JSON_FILE);
-        } else {
-            courseDataJSON = JSONFileManager.readJSON(this, R.raw.courses);
-        }
+
+//        String courseDataJSON;
+//        if (JSONFileManager.exitsAsLocalFile(this, JSON_FILE)) {
+//            courseDataJSON = JSONFileManager.readJSON(this, JSON_FILE);
+//        } else {
+//            courseDataJSON = JSONFileManager.readJSON(this, R.raw.courses);
+//        }
+
+//        mRecyclerView = (RecyclerView) findViewById(R.id.rvCourses);
+//        mAdapter = new CourseAdapter(this, courseDataJSON);
+//        mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rvCourses);
-        mAdapter = new CourseAdapter(this, courseDataJSON);
-        mRecyclerView.setAdapter(mAdapter);
+
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                .registerReceiver(mBroadcastReceiver,
+                        new IntentFilter(MyService.MY_SERVICE_MESSAGE));
+        SharedPreferences settings = getSharedPreferences( getResources().getString(R.string.app_name), Context.MODE_PRIVATE );
+        fetchBuildings();
+
     }
 
     @Override
@@ -82,11 +133,20 @@ public class MainActivity extends Activity {
                 return true;
 
             case R.id.action_reset:
-                String originalCourseDataJSON = JSONFileManager.readJSON(this, R.raw.courses);
-                mAdapter.setCourseDataWithString(originalCourseDataJSON);
+                fetchBuildings();
+                //String originalCourseDataJSON = JSONFileManager.readJSON(this, R.raw.courses);
+                //mAdapter.setCourseDataWithString(originalCourseDataJSON);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                .unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -126,4 +186,30 @@ public class MainActivity extends Activity {
             }
         }
     }
+
+    private void fetchBuildings(){
+        Log.d(TAG_DEBUG, "fetchBuildings: Called");
+        if (NetworkHelper.hasNetworkAccess(this)) {
+            Log.d(TAG_DEBUG, "fetchBuildings: Has Network");
+            RequestPackage requestPackage = new RequestPackage();
+            requestPackage.setEndPoint(JSON_URI_SERVER);
+            Intent intent = new Intent(this, MyService.class);
+            intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
+            startService(intent);
+            Log.d(TAG_DEBUG, "fetchBuildings:  after start Intent service");
+        } else {
+            Log.v(TAG_DEBUG, "fetchBuildings: No Network");
+            Toast.makeText(this, "Network not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayBuildings(){
+        Log.v(TAG_DEBUG, "displayBuildings: " + " displayBuilding called.");
+        if (mBuildingsList != null) {
+        mAdapter = new CourseAdapter(this, mBuildingsList);
+        mRecyclerView.setAdapter(mAdapter);
+        }
+    }
+
+
 }
