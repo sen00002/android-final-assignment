@@ -49,9 +49,9 @@ public class MainActivity extends Activity {
     public static final int REQUEST_NEW_COURSE = 1;
     public static final int REQUEST_EDIT_COURSE = 2;
 //    private static final String JSON_FILE = "courses.json";
-    private static final String JSON_FILE = "http://10.0.2.2:3000/courses/";
-    private static final String JSON_URI_LOCAL = "courses.json";
-    private static final String JSON_URI_SERVER = "http://10.0.2.2:3000/courses/";
+    private static final String JSON_FILE = "https://madd.mybluemix.net/courses";
+//    private static final String JSON_URI_LOCAL = "courses.json";
+    private static final String JSON_URI_SERVER = "https://madd.mybluemix.net/courses";
     private CourseAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
