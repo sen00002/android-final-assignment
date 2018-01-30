@@ -42,7 +42,7 @@ public class HttpHelper {
         InputStream is = null;
         try {
 
-            Log.d( TAG_DEBUG, "downloadUrl: trying to connect");
+            Log.d(TAG_DEBUG, "downloadUrl: trying to connect");
 
             URL url = new URL(address);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -53,7 +53,7 @@ public class HttpHelper {
             conn.setDoInput(true);
             JSONObject json = new JSONObject(requestPackage.getParams());
             String params = json.toString();
-            if ( (requestPackage.getMethod() == HttpMethod.POST ||
+            if ((requestPackage.getMethod() == HttpMethod.POST ||
                     requestPackage.getMethod() == HttpMethod.PUT) &&
                     params.length() > 0) {
                 // The web service expects the request body to be in JSON format.

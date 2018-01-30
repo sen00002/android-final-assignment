@@ -7,8 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import mad9132.maddapp.MyServices.MyService;
 import mad9132.maddapp.model.CoursePOJO;
+import mad9132.maddapp.utils.HttpMethod;
+import mad9132.maddapp.utils.RequestPackage;
 
+import static mad9132.maddapp.MainActivity.JSON_URI_SERVER;
 import static mad9132.maddapp.MainActivity.NEW_COURSE_DATA;
 
 
@@ -94,7 +98,21 @@ public class NewCourseActivity extends Activity {
                 newCourse.setDescription(newDescription);
                 newCourse.setLevel(newLevel);
 
-                Intent intent = new Intent();
+                RequestPackage requestPackage = new RequestPackage();
+                requestPackage.setMethod(HttpMethod.POST);
+                requestPackage.setEndPoint(JSON_URI_SERVER);
+                requestPackage.setParam("courseId", String.valueOf(newCourse.getCourseId()));
+                requestPackage.setParam("code", newCourse.getCode());
+                requestPackage.setParam("name", newCourse.getName());
+                requestPackage.setParam("description", newCourse.getDescription());
+                requestPackage.setParam("level", String.valueOf(newCourse.getLevel()));
+
+
+                Intent intent = new Intent(getApplicationContext(), MyService.class);
+                intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
+                startService(intent);
+
+                intent = new Intent();
                 intent.putExtra(NEW_COURSE_DATA, newCourse);
                 setResult(RESULT_OK, intent);
                 finish();

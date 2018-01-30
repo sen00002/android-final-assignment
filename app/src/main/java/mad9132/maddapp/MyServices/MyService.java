@@ -17,7 +17,7 @@ import static mad9132.maddapp.MainActivity.TAG_DEBUG;
 
 /**
  * Class MyService.
- *
+ * <p>
  * Fetch the data at URI.
  * Return an array of Building[] as a broadcast message.
  *

@@ -18,8 +18,12 @@ import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.List;
 
+import mad9132.maddapp.MyServices.MyService;
 import mad9132.maddapp.model.CoursePOJO;
+import mad9132.maddapp.utils.HttpMethod;
+import mad9132.maddapp.utils.RequestPackage;
 
+import static mad9132.maddapp.MainActivity.JSON_URI_SERVER;
 import static mad9132.maddapp.MainActivity.REQUEST_EDIT_COURSE;
 
 /**
@@ -35,24 +39,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     private Activity mContext;
     private List<CoursePOJO> mCourses;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public View mView;
-        public TextView tvCode;
-        public TextView tvName;
-        public ImageButton bEditCourse;
-        public ImageButton bDeleteCourse;
-
-        public ViewHolder(View courseView) {
-            super(courseView);
-
-            mView = courseView;
-
-            tvCode = (TextView) courseView.findViewById(R.id.courseCodeText);
-            tvName = (TextView) courseView.findViewById(R.id.courseNameText);
-            bEditCourse = (ImageButton) courseView.findViewById(R.id.editCourseButton);
-            bDeleteCourse = (ImageButton) courseView.findViewById(R.id.deleteCourseButton);
-        }
+    public CourseAdapter(Activity context, List<CoursePOJO> buildings) {
+        this.mContext = context;
+        this.mCourses = buildings;
     }
 
 
@@ -62,11 +51,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 //        Gson gson = new Gson();
 //        mCourses = new ArrayList<>(Arrays.asList(gson.fromJson(buildingsJSON, CoursePOJO[].class)));
 //    }
-
-    public CourseAdapter(Activity context, List<CoursePOJO> buildings){
-        this.mContext = context;
-        this.mCourses = buildings;
-    }
 
     @Override
     public CourseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -125,19 +109,25 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
                                 holder.bEditCourse.setVisibility(View.INVISIBLE);
 
                                 // TODO - for Doors Open app, replace these two lines:
-                                mCourses.remove(position);
-                                CourseAdapter.this.notifyDataSetChanged();
+//                                try {
+//                                    mCourses.remove(position);
+//                                    Log.i(TAG, "onClick: "+ mCourses.toString());
+//                                }catch (Exception e){
+//                                    e.printStackTrace();
+//                                }
+//                                CourseAdapter.this.notifyDataSetChanged();
                                 // With call to intent service to DELETE /buildings/:id
                                 //
-                                // RequestPackage requestPackage = new RequestPackage();
-                                // requestPackage.setMethod( HttpMethod.DELETE );
-                                // requestPackage.setEndPoint( JSON_URL + aBuilding.getBuildingId() );
+                                RequestPackage requestPackage = new RequestPackage();
+                                requestPackage.setMethod(HttpMethod.DELETE);
+                                requestPackage.setEndPoint(JSON_URI_SERVER + aCourse.getCourseId());
 
-                                // Intent intent = new Intent(this, MyService.class);
-                                // intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
-                                // mContext.startService(intent);
+                                Intent intent = new Intent(mContext, MyService.class);
+                                intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
+                                mContext.startService(intent);
 
                                 dialog.dismiss();
+
                             }
                         })
 
@@ -176,12 +166,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         return mCourses.size();
     }
 
-    public void addCourse(CoursePOJO newCourse) {
-        mCourses.add(newCourse);
-        notifyDataSetChanged();
-        Log.i(TAG, "Added Course: " + newCourse.getName());
-    }
-
     public void updateCourse(CoursePOJO updatedCourse) {
         int index = mCourses.indexOf(updatedCourse);
         if (index >= 0) {
@@ -191,8 +175,16 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         }
     }
 
+
+//    This function is not needed because whole code is convert to API
+//    public void addCourse(CoursePOJO newCourse) {
+//        mCourses.add(newCourse);
+//        notifyDataSetChanged();
+//        Log.i(TAG, "Added Course: " + newCourse.getName());
+//    }
+
     public String getCourseDataAsString() {
-        if(mCourses != null)
+        if (mCourses != null)
             return new Gson().toJson(mCourses);
         else
             return " Null data ";
@@ -204,6 +196,26 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         mCourses.addAll(Arrays.asList(gson.fromJson(courseDataJSON, CoursePOJO[].class)));
         this.notifyDataSetChanged();
         Log.i(TAG, "Reverting to.... Original list of courses");
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public View mView;
+        public TextView tvCode;
+        public TextView tvName;
+        public ImageButton bEditCourse;
+        public ImageButton bDeleteCourse;
+
+        public ViewHolder(View courseView) {
+            super(courseView);
+
+            mView = courseView;
+
+            tvCode = (TextView) courseView.findViewById(R.id.courseCodeText);
+            tvName = (TextView) courseView.findViewById(R.id.courseNameText);
+            bEditCourse = (ImageButton) courseView.findViewById(R.id.editCourseButton);
+            bDeleteCourse = (ImageButton) courseView.findViewById(R.id.deleteCourseButton);
+        }
     }
 
 

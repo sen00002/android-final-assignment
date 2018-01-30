@@ -11,18 +11,44 @@ import java.util.Map;
 /**
  * RequestPackage - POJO composed of the endPoint (i.e. URL address), method (default: "GET"), and
  * a map of query params.
- *
+ * <p>
  * Implements the Parceable interface, allowing instances of this class to be passed around in Intents.
- *
+ * <p>
  * Source - https://gist.github.com/1bc5ed77d08c80d75117b62e987887bb.git
  *
  * @author David Gasner
  */
 public class RequestPackage implements Parcelable {
 
+    public static final Creator<RequestPackage> CREATOR = new Creator<RequestPackage>() {
+        @Override
+        public RequestPackage createFromParcel(Parcel source) {
+            return new RequestPackage(source);
+        }
+
+        @Override
+        public RequestPackage[] newArray(int size) {
+            return new RequestPackage[size];
+        }
+    };
     private String endPoint;
     private HttpMethod method = HttpMethod.GET;
     private Map<String, String> params = new HashMap<>();
+
+    public RequestPackage() {
+    }
+
+    protected RequestPackage(Parcel in) {
+        this.endPoint = in.readString();
+        this.method = HttpMethod.valueOf(in.readString());
+        int paramsSize = in.readInt();
+        this.params = new HashMap<String, String>(paramsSize);
+        for (int i = 0; i < paramsSize; i++) {
+            String key = in.readString();
+            String value = in.readString();
+            this.params.put(key, value);
+        }
+    }
 
     public String getEndpoint() {
         return endPoint;
@@ -85,31 +111,4 @@ public class RequestPackage implements Parcelable {
             dest.writeString(entry.getValue());
         }
     }
-
-    public RequestPackage() {
-    }
-
-    protected RequestPackage(Parcel in) {
-        this.endPoint = in.readString();
-        this.method = HttpMethod.valueOf(in.readString());
-        int paramsSize = in.readInt();
-        this.params = new HashMap<String, String>(paramsSize);
-        for (int i = 0; i < paramsSize; i++) {
-            String key = in.readString();
-            String value = in.readString();
-            this.params.put(key, value);
-        }
-    }
-
-    public static final Creator<RequestPackage> CREATOR = new Creator<RequestPackage>() {
-        @Override
-        public RequestPackage createFromParcel(Parcel source) {
-            return new RequestPackage(source);
-        }
-
-        @Override
-        public RequestPackage[] newArray(int size) {
-            return new RequestPackage[size];
-        }
-    };
 }

@@ -19,7 +19,6 @@ import java.util.List;
 
 import mad9132.maddapp.MyServices.MyService;
 import mad9132.maddapp.model.CoursePOJO;
-import mad9132.maddapp.utils.JSONFileManager;
 import mad9132.maddapp.utils.NetworkHelper;
 import mad9132.maddapp.utils.RequestPackage;
 
@@ -49,9 +48,9 @@ public class MainActivity extends Activity {
     public static final int REQUEST_NEW_COURSE = 1;
     public static final int REQUEST_EDIT_COURSE = 2;
 //    private static final String JSON_FILE = "courses.json";
-    private static final String JSON_FILE = "https://madd.mybluemix.net/courses";
-//    private static final String JSON_URI_LOCAL = "courses.json";
-    private static final String JSON_URI_SERVER = "https://madd.mybluemix.net/courses";
+    public static final String JSON_FILE = "http://madd.mybluemix.net/courses/";
+    public static final String JSON_URI_LOCAL = "courses.json";
+    public static final String JSON_URI_SERVER = "http://madd.mybluemix.net/courses/";
     private CourseAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -137,6 +136,11 @@ public class MainActivity extends Activity {
                 //String originalCourseDataJSON = JSONFileManager.readJSON(this, R.raw.courses);
                 //mAdapter.setCourseDataWithString(originalCourseDataJSON);
                 return true;
+
+            case  R.id.action_about:
+                Toast.makeText(this, "Rajat Sen (00002)", Toast.LENGTH_SHORT).show();
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -152,11 +156,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onStop() {
         /* Write the course data as a JSON string to local storage */
-        boolean isSuccess = JSONFileManager.writeJSON(this, JSON_FILE, mAdapter.getCourseDataAsString());
-
-        if (!isSuccess) {
-            Toast.makeText(this, "Error: writing to local file: " + JSON_FILE, Toast.LENGTH_LONG).show();
-        }
+//        boolean isSuccess = JSONFileManager.writeJSON(this, JSON_FILE, mAdapter.getCourseDataAsString());
+//
+//        if (!isSuccess) {
+//            Toast.makeText(this, "Error: writing to local file: " + JSON_FILE, Toast.LENGTH_LONG).show();
+//        }
         super.onStop();
     }
 
@@ -166,7 +170,8 @@ public class MainActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 CoursePOJO newCourse = data.getExtras().getParcelable(NEW_COURSE_DATA);
                 Toast.makeText(this, "Added Course: " + newCourse.getName(), Toast.LENGTH_SHORT).show();
-                mAdapter.addCourse(newCourse);
+                fetchBuildings();
+                //mAdapter.addCourse(newCourse);
             }
 
             if (resultCode == RESULT_CANCELED) {
