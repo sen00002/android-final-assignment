@@ -1,5 +1,5 @@
 package mad9132.maddapp.model;
-
+// creating a new java class named as CoursePOJO in package model
 import android.os.Parcel;
 import android.os.Parcelable;
 

@@ -110,15 +110,19 @@ public class NewCourseActivity extends Activity {
 
                 Intent intent = new Intent(getApplicationContext(), MyService.class);
                 intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
-                startService(intent);
-
-                intent = new Intent();
                 intent.putExtra(NEW_COURSE_DATA, newCourse);
                 setResult(RESULT_OK, intent);
+                startService(intent);
+
+//                intent = new Intent();
+//                intent.putExtra(NEW_COURSE_DATA, newCourse);
+//                setResult(RESULT_OK, intent);
                 finish();
             }
         });
 
+
+        // Cancel button
         Button cancelButton = findViewById(R.id.cancelEditCourse);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

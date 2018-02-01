@@ -8,9 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import mad9132.maddapp.MyServices.MyService;
 import mad9132.maddapp.model.CoursePOJO;
+import mad9132.maddapp.utils.HttpMethod;
+import mad9132.maddapp.utils.RequestPackage;
 
 import static mad9132.maddapp.MainActivity.EDIT_COURSE_DATA;
+import static mad9132.maddapp.MainActivity.JSON_URI_SERVER;
 
 
 /**
@@ -91,9 +95,25 @@ public class EditCourseActivity extends Activity {
                 selectedCourse.setDescription(description);
                 selectedCourse.setLevel(level);
 
-                Intent intent = new Intent();
+                RequestPackage requestPackage = new RequestPackage();
+                requestPackage.setMethod(HttpMethod.PUT);
+                requestPackage.setEndPoint(JSON_URI_SERVER + String.valueOf(selectedCourse.getCourseId()));
+                requestPackage.setParam("courseId", String.valueOf(selectedCourse.getCourseId()));
+                requestPackage.setParam("code", selectedCourse.getCode());
+                requestPackage.setParam("name", selectedCourse.getName());
+                requestPackage.setParam("description", selectedCourse.getDescription());
+                requestPackage.setParam("level", String.valueOf(selectedCourse.getLevel()));
+
+
+                Intent intent = new Intent(getApplicationContext(), MyService.class);
+                intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
                 intent.putExtra(EDIT_COURSE_DATA, selectedCourse);
                 setResult(RESULT_OK, intent);
+                startService(intent);
+
+//                Intent intent = new Intent();
+//                intent.putExtra(EDIT_COURSE_DATA, selectedCourse);
+//                setResult(RESULT_OK, intent);
                 finish();
             }
         });

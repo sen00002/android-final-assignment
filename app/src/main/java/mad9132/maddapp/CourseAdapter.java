@@ -29,6 +29,12 @@ import static mad9132.maddapp.MainActivity.REQUEST_EDIT_COURSE;
 /**
  * CourseAdapter.
  *
+ * CourseAdapter. A specialized Recycler.Adapter
+ *
+ * The adapter provides access to the items in your data set (Courses in this example), creates views
+ * for items, and replaces the content of some views with new data items when the original item is
+ * no longer visible.
+ *
  * @author Gerald.Hurdle@AlgonquinCollege.com
  */
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
@@ -52,6 +58,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 //        mCourses = new ArrayList<>(Arrays.asList(gson.fromJson(buildingsJSON, CoursePOJO[].class)));
 //    }
 
+
+    // creating a viewholder by invoking layout manager
     @Override
     public CourseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -60,6 +68,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         return viewHolder;
     }
 
+    // Replacing the contents of a viewholder by invoking the layout manager
     @Override
     public void onBindViewHolder(final CourseAdapter.ViewHolder holder, final int position) {
         final CoursePOJO aCourse = mCourses.get(position);
@@ -67,6 +76,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         holder.tvCode.setText(aCourse.getCode());
         holder.tvName.setText(aCourse.getName());
 
+        // on click listener
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +86,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             }
         });
 
+        // on long click listener
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -91,24 +102,23 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             }
         });
 
+        // Deleting the course
         holder.bDeleteCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 // TODO - externalize strings to strings.xml
-                builder.setTitle("Confirm")
-                        .setMessage("Delete " + aCourse.getCode() + " - " + aCourse.getName() + "?")
+                builder.setTitle("Confirm");
+                builder.setMessage("Delete " + aCourse.getCode() + " - " + aCourse.getName() + "?");
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Delete this course
+                        //Toast.makeText(mContext, "Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
+                        //Log.i(TAG, "Deleted Course: " + aCourse.getCode());
+                        holder.bDeleteCourse.setVisibility(View.INVISIBLE);
+                        holder.bEditCourse.setVisibility(View.INVISIBLE);
 
-                        // Displays: OK
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Delete this course
-                                Toast.makeText(mContext, "Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
-                                Log.i(TAG, "Deleted Course: " + aCourse.getCode());
-                                holder.bDeleteCourse.setVisibility(View.INVISIBLE);
-                                holder.bEditCourse.setVisibility(View.INVISIBLE);
-
-                                // TODO - for Doors Open app, replace these two lines:
+                        // TODO - for Doors Open app, replace these two lines:
 //                                try {
 //                                    mCourses.remove(position);
 //                                    Log.i(TAG, "onClick: "+ mCourses.toString());
@@ -116,35 +126,36 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 //                                    e.printStackTrace();
 //                                }
 //                                CourseAdapter.this.notifyDataSetChanged();
-                                // With call to intent service to DELETE /buildings/:id
-                                //
-                                RequestPackage requestPackage = new RequestPackage();
-                                requestPackage.setMethod(HttpMethod.DELETE);
-                                requestPackage.setEndPoint(JSON_URI_SERVER + aCourse.getCourseId());
+                        // With call to intent service to DELETE /buildings/:id
+                        //
 
-                                Intent intent = new Intent(mContext, MyService.class);
-                                intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
-                                mContext.startService(intent);
+                        RequestPackage requestPackage = new RequestPackage();
+                        requestPackage.setMethod(HttpMethod.DELETE);
+                        requestPackage.setEndPoint(JSON_URI_SERVER + aCourse.getCourseId());
 
-                                dialog.dismiss();
+                        Intent intent = new Intent(mContext, MyService.class);
+                        intent.putExtra(MyService.REQUEST_PACKAGE, requestPackage);
+                        mContext.startService(intent);
 
-                            }
-                        })
+                        dialog.dismiss();
 
-                        // Displays: Cancel
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing
-                                dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
 
-                                Toast.makeText(mContext, "CANCELLED: Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
-                                Log.i(TAG, "CANCELLED: Deleted Course: " + aCourse.getCode());
-                            }
-                        });
+                        Toast.makeText(mContext, "CANCELLED: Deleted Course: " + aCourse.getCode(), Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "CANCELLED: Deleted Course: " + aCourse.getCode());
+                    }
+                });
 
                 AlertDialog alert = builder.create();
                 alert.show();
+
+
             }
         });
 
@@ -161,6 +172,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         });
     }
 
+    // Returning the size of dataset by invoking Layout Manager
     @Override
     public int getItemCount() {
         return mCourses.size();
@@ -174,6 +186,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             Log.i(TAG, "Updated Course: " + updatedCourse.getCode());
         }
     }
+
+
+
+
 
 
 //    This function is not needed because whole code is convert to API
@@ -217,6 +233,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             bDeleteCourse = (ImageButton) courseView.findViewById(R.id.deleteCourseButton);
         }
     }
+
 
 
 }

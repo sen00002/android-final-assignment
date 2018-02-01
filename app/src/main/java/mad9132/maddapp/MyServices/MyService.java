@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 
 import mad9132.maddapp.model.CoursePOJO;
-import mad9132.maddapp.utils.HttpHelper;
+import mad9132.maddapp.utils.HttpHelperOkhttp;
 import mad9132.maddapp.utils.RequestPackage;
 
 import static mad9132.maddapp.MainActivity.TAG_DEBUG;
@@ -41,7 +41,8 @@ public class MyService extends IntentService {
         Log.d(TAG_DEBUG, "MyService: httpHelper Started");
         String response;
         try {
-            response = HttpHelper.downloadUrl(requestPackage);
+            // changed class to HttpHelperOkhttp from HttpHelper class
+            response = HttpHelperOkhttp.downloadFromFeed(requestPackage);
             Log.d(TAG_DEBUG, "MyService: httpHelper end");
         } catch (IOException e) {
             e.printStackTrace();

@@ -45,16 +45,22 @@ public class MainActivity extends Activity {
     public static final String TAG_DEBUG = "Debug";
     public static final String NEW_COURSE_DATA = "NEW_COURSE_DATA";
     public static final String EDIT_COURSE_DATA = "EDIT_COURSE_DATA";
+    public static final String DELETE_COURSE_DATA = "DELETE_COURSE_DATA";
     public static final int REQUEST_NEW_COURSE = 1;
     public static final int REQUEST_EDIT_COURSE = 2;
+    public static final int REQUEST_DELETE_COURSE = 3;
 //    private static final String JSON_FILE = "courses.json";
-    public static final String JSON_FILE = "http://madd.mybluemix.net/courses/";
-    public static final String JSON_URI_LOCAL = "courses.json";
-    public static final String JSON_URI_SERVER = "http://madd.mybluemix.net/courses/";
+//    public static final String JSON_FILE = "courses.json";
+    public static final String JSON_URI_SERVER = "http://10.0.2.2:3000/courses/";
+//    public static final String JSON_URI_SERVER = "http://madd.mybluemix.net/courses/";
     private CourseAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     private List<CoursePOJO> mBuildingsList;
+
+    public MenuItem actionRestart;
+
+
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 
@@ -64,13 +70,14 @@ public class MainActivity extends Activity {
             if (intent.hasExtra(MyService.MY_SERVICE_PAYLOAD)) {
                 CoursePOJO[] buildingsArray = (CoursePOJO[]) intent
                         .getParcelableArrayExtra(MyService.MY_SERVICE_PAYLOAD);
-//                Toast.makeText(MainActivity.this,
-//                        "Received " + buildingsArray.length + " buildings from service",
-//                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,
+                        "Received " + buildingsArray.length + " buildings from service",
+                        Toast.LENGTH_SHORT).show();
                 mBuildingsList = Arrays.asList(buildingsArray);
                 displayBuildings();
             } else if (intent.hasExtra(MyService.MY_SERVICE_RESPONSE)) {
                 CoursePOJO myBuilding = intent.getParcelableExtra(MyService.MY_SERVICE_RESPONSE);
+                displayBuildings();
             } else if (intent.hasExtra(MyService.MY_SERVICE_EXCEPTION)) {
                 String message = intent.getStringExtra(MyService.MY_SERVICE_EXCEPTION);
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
@@ -105,6 +112,9 @@ public class MainActivity extends Activity {
 //        mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rvCourses);
+
+        actionRestart = (MenuItem) findViewById(R.id.action_reset);
+
 
         LocalBroadcastManager.getInstance(getApplicationContext())
                 .registerReceiver(mBroadcastReceiver,
@@ -183,13 +193,19 @@ public class MainActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 CoursePOJO updatedCourse = data.getExtras().getParcelable(EDIT_COURSE_DATA);
                 Toast.makeText(this, "Updated Course: " + updatedCourse.getName(), Toast.LENGTH_SHORT).show();
-                mAdapter.updateCourse(updatedCourse);
+                //mAdapter.updateCourse(updatedCourse);
+                fetchBuildings();
             }
 
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Cancelled: Edit Course", Toast.LENGTH_SHORT).show();
             }
         }
+
+    }
+
+    public void featchBuildings_public(){
+        this.fetchBuildings();
     }
 
     private void fetchBuildings(){
