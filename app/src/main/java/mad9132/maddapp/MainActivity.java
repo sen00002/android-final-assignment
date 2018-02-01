@@ -77,7 +77,8 @@ public class MainActivity extends Activity {
                 displayBuildings();
             } else if (intent.hasExtra(MyService.MY_SERVICE_RESPONSE)) {
                 CoursePOJO myBuilding = intent.getParcelableExtra(MyService.MY_SERVICE_RESPONSE);
-                displayBuildings();
+//                displayBuildings();
+                fetchBuildings();
             } else if (intent.hasExtra(MyService.MY_SERVICE_EXCEPTION)) {
                 String message = intent.getStringExtra(MyService.MY_SERVICE_EXCEPTION);
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
